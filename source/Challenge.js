@@ -14,7 +14,6 @@ var util = require('util');
 var path = require('path');
 var argv = require('yargs');
 var libAsync = require('async');
-var libFS = require('fs');
 var libSuperTest = null;
 var _BaseJsonPath = argv.jsonPath || path.dirname(module.parent.filename) + '/';
 
@@ -142,6 +141,8 @@ var Challenge = (
 								postBody = pCase;
 							}
 						}
+
+						tmpOptions.url = tmpOptions.url || '';
 
 						var tmpRequest = null;
 						var tmpfPrevalidator = null; //function to perform simple (pre)validation for convenience, or in case no validator is specified
