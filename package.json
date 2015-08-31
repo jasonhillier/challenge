@@ -1,6 +1,6 @@
 {
   "name": "challenge",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A node.js mocha unit test generator with support for JSON case data.",
   "main": "source/Challenge.js",
   "scripts": {
@@ -28,13 +28,15 @@
   },
   "homepage": "https://github.com/jasonhillier/challenge",
   "devDependencies": {
-    "async": "^1.4.2",
-    "chai": "2.0.0",
     "codeclimate-test-reporter": "^0.1.0",
     "coveralls": "^2.11.4",
     "istanbul": "0.3.5",
-    "mocha": "2.1.0",
+    "mocha": "2.1.0"
+  },
+  "dependencies": {
+    "chai": "2.0.0",
     "supertest": "^1.1.0",
+    "async": "^1.4.2",
     "yargs": "^3.23.0"
   }
 }
