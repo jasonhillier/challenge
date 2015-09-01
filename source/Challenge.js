@@ -161,6 +161,8 @@ var Challenge = (
 										.to.equal(200); //expect 200 OK
 									Expect(typeof(pResponse.body))
 										.to.equal('object'); //TODO: this is pretty generic. Maybe work off single vs. Array
+									Expect(pResponse.body)
+										.to.not.have.property('Error');
 
 									return fNext();
 								}
@@ -178,8 +180,10 @@ var Challenge = (
 										.to.equal(200); //expect 200 OK
 									Expect(pResponse.body)
 										.to.be.an('object');
-									Expect(pResponse.body.id)
-										.to.equal(pCase.id || pCase.data.id);
+									Expect(pResponse.body)
+										.to.not.have.property('Error');
+
+									//TODO: check ID field
 
 									return fNext();
 								}
@@ -197,8 +201,10 @@ var Challenge = (
 										.to.equal(200); //expect 200 OK
 									Expect(pResponse.body)
 										.to.be.an('object');
-									Expect(pResponse.body.id)
-										.to.not.equal(0);
+									Expect(pResponse.body)
+										.to.not.have.property('Error');
+									
+									//TODO: check ID field
 
 									return fNext();
 								}
