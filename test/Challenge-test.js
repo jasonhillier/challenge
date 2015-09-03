@@ -70,5 +70,31 @@ suite
 
 				return fDone();
 			});
+
+		Challenge
+			.cases(
+			{
+				joins: [
+				{
+					name: 'left',
+					loadFrom:'case-data.json', range: [0,1]
+				},
+				{
+					name: 'right',
+					loadFrom:'case-data.json', range: [1,2]
+				}]
+			})
+			.test('should generate joined tests from json data',
+			function(pCase, fDone)
+			{
+				Expect(pCase)
+					.to.have.property('left');
+				Expect(pCase)
+					.to.have.property('right');
+				Expect(pCase.left.id)
+					.to.equal(pCase.right.id-1); //id in right set should be shifted by one
+
+				return fDone();
+			});
 	}
 );

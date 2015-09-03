@@ -42,17 +42,20 @@ var Challenge = (
 	//main function used to define tests
 	cases: function(pOptions)
 	{
-		var tmpCaseData = pOptions;
+		var tmpAllCaseData = pOptions;
 
 		if (pOptions.constructor !== Array)
 		{
-			tmpCaseData = [];
+			tmpAllCaseData = [];
 
 			//load test case data according to options
 			if (pOptions.groups)
 			{
 				pOptions.groups.forEach(function(group)
 				{
+					if (!group.name)
+						throw Error('Group definition missing name!');
+
 					var tmpGroupCases = Challenge.loadTestCases(group);
 					for(var x=0; x<tmpGroupCases.length; x++)
 					{
@@ -62,13 +65,36 @@ var Challenge = (
 						tmpCase.groupName = group.name;
 						tmpCase.data = tmpGroupCases[x];
 
-						tmpCaseData.push(tmpCase);
+						tmpAllCaseData.push(tmpCase);
+					}
+				});
+			}
+			else if (pOptions.joins)
+			{
+				pOptions.joins.forEach(function(join)
+				{
+					if (!join.name)
+						throw Error('Join definition missing name!');
+
+					var tmpJoinCases = Challenge.loadTestCases(join);
+					for(var x=0; x<tmpJoinCases.length; x++)
+					{
+						if (tmpAllCaseData[x])
+						{
+							tmpAllCaseData[x][join.name] = tmpJoinCases[x];
+						}
+						else
+						{
+							var tmpCase = {};
+							tmpCase[join.name] = tmpJoinCases[x];
+							tmpAllCaseData.push(tmpCase);
+						}
 					}
 				});
 			}
 			else
 			{
-				tmpCaseData = Challenge.loadTestCases(pOptions);
+				tmpAllCaseData = Challenge.loadTestCases(pOptions);
 			}
 		}
 
@@ -76,11 +102,11 @@ var Challenge = (
 		{
 			run: function(fTest, fDone)
 			{
-				libAsync.eachSeries(tmpCaseData, fTest, fDone);
+				libAsync.eachSeries(tmpAllCaseData, fTest, fDone);
 			},
 			test: function(pName, fTest)
 			{
-				for (var i=0; i<tmpCaseData.length; i++)
+				for (var i=0; i<tmpAllCaseData.length; i++)
 				{
 					//keep test case data contextualized with the test function definition
 					var testClosure = function(testCase)
@@ -93,15 +119,15 @@ var Challenge = (
 
 					//define name for test
 					var tmpTestName = pName + ' case ';
-					if (tmpCaseData[i].groupName)
+					if (tmpAllCaseData[i].groupName)
 					{
-						tmpTestName += util.format('\'%s %s\'', tmpCaseData[i].groupName, tmpCaseData[i].groupIndex);
+						tmpTestName += util.format('\'%s %s\'', tmpAllCaseData[i].groupName, tmpAllCaseData[i].groupIndex);
 					}
 					else
 					{
-						if (typeof(tmpCaseData[i]) === 'string')
+						if (typeof(tmpAllCaseData[i]) === 'string')
 						{
-							tmpTestName += util.format('\'%s\'', tmpCaseData[i]);
+							tmpTestName += util.format('\'%s\'', tmpAllCaseData[i]);
 						}
 						else
 						{
@@ -114,7 +140,7 @@ var Challenge = (
 					test
 					(
 						tmpTestName,
-						testClosure(tmpCaseData[i])
+						testClosure(tmpAllCaseData[i])
 					);
 				}
 
