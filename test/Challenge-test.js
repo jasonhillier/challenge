@@ -10,7 +10,7 @@ var Chai = require("chai");
 var Expect = Chai.expect;
 var Assert = Chai.assert;
 
-var Challenge = require('../source/Challenge');
+var Challenge = require('../source/Challenge').new();
 
 suite
 (

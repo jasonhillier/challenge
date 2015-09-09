@@ -10,8 +10,6 @@ var Chai = require("chai");
 var Expect = Chai.expect;
 var Assert = Chai.assert;
 
-var Challenge = require('../source/Challenge');
-
 var _TestWebServerPort = 8080;
 
 suite
@@ -71,16 +69,8 @@ suite
 
 function generateApiTests(pBaseUrl, pFailTest)
 {
-
-	test
-	(
-		'Challenge should initialize with support for REST request test generation',
-		function()
-		{
-			Challenge.initialize({ServerURL: pBaseUrl});
-		}
-	);
-
+	Challenge = require('../source/Challenge').new({ServerURL: pBaseUrl});
+	
 
 	//Utilize chaining feature, run two tests on each endpoint (GET,POST,PUT,DEL)
 	Challenge
