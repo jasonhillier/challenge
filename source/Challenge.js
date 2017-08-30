@@ -92,6 +92,10 @@ function ChallengeInitializer(pOptions)
 						}
 					});
 				}
+				else if(pOptions.strings)
+				{
+					tmpAllCaseData = pOptions.strings.data;
+				}
 				else
 				{
 					tmpAllCaseData = Challenge.loadTestCases(pOptions);
@@ -215,9 +219,22 @@ function ChallengeInitializer(pOptions)
 									}
 									break;
 								case 'POST': //Create
-									tmpRequest = libSuperTest
+									if (tmpOptions.hasOwnProperty(`header`))
+									{
+										tmpRequest = libSuperTest
+										.post(tmpOptions.url)
+										.set('Content-Type', tmpOptions.header.Content_Type)
+										.set('Content-Disposition', tmpOptions.header.Content_Disposition)
+										.set('Content-Length', tmpOptions.header.Content_Length)
+										.send(postBody);
+									}
+									else
+									{
+										tmpRequest = libSuperTest
 										.post(tmpOptions.url)
 										.send(postBody);
+									}
+									
 									tmpfPrevalidator = function(pError, pResponse, pCase, fNext)
 									{
 										if (pError)
